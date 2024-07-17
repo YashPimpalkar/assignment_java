@@ -12,11 +12,23 @@ public class AllExceptionHandler
 {
 @ExceptionHandler(UserNotFound.class)
 
-public ResponseEntity<ApiResponse> productNotFoundExceptionHandler(UserNotFound ex)
+public ResponseEntity<ApiResponse> UserNotFoundExceptionHandler(UserNotFound ex)
 {
 	String message=ex.getMessage();
 	ApiResponse apiResponse=new ApiResponse();
 	return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
 	
 }
+
+@ExceptionHandler(ItemNotFound.class)
+
+public ResponseEntity<ApiResponse> ItemNotFoundExceptionHandler(ItemNotFound ex)
+{
+	String message=ex.getMessage();
+	ApiResponse apiResponse=new ApiResponse();
+	return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
+	
+}
+
+
 }
