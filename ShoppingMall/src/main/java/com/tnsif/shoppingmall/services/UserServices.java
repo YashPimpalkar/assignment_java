@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserServices {
     
 	@Autowired
 	private UserRepository repo;

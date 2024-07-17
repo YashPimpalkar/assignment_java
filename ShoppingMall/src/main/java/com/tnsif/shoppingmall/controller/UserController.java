@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tnsif.shoppingmall.entity.User;
 import com.tnsif.shoppingmall.exception.UserNotFound;
 import com.tnsif.shoppingmall.repository.UserRepository;
-import com.tnsif.shoppingmall.services.UserService;
+import com.tnsif.shoppingmall.services.UserServices;
 
 
 
@@ -28,7 +28,7 @@ import com.tnsif.shoppingmall.services.UserService;
 @RestController
 public class UserController {
 	@Autowired
-	UserService services;
+	UserServices services;
 	
 	@Autowired
 	UserRepository userRepository ;
