@@ -15,82 +15,80 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.tnsif.shoppingmall.entity.User;
 import com.tnsif.shoppingmall.exception.UserNotFound;
 import com.tnsif.shoppingmall.repository.UserRepository;
 import com.tnsif.shoppingmall.services.UserServices;
 
-
-
-
-
 @RestController
 public class UserController {
 	@Autowired
 	UserServices services;
-	
-	@Autowired
-	UserRepository userRepository ;
-	
-	@GetMapping("/users")
-   public List<User> list(){
-	return services.listAll();
-   }
-	
-	 @GetMapping("/users/{id}")
-	 public ResponseEntity<User> get(@PathVariable Integer id) 
-	 {
-	 try
-	 {
-	 User user = services.get(id);
-	 return new ResponseEntity<User>(user, HttpStatus.OK);
-	 } 
 
-	 catch(UserNotFound ex)
-	 {
-		
-		 return new ResponseEntity<User>( HttpStatus.NOT_FOUND);
-	 }
-	 }
-	 
-	 @PostMapping("/users")
-	 @ResponseStatus(code =HttpStatus.CREATED)
-	 public void add(@RequestBody User user) 
-	 {
-	 services.save(user);
-	 }
-	 
-	 
-	 @PutMapping("/users/{id}")
-	 @ResponseStatus(code =HttpStatus.CREATED)
-	 public ResponseEntity<?> update(@RequestBody User user, @PathVariable Integer id) 
-	 {
-	 try
-	 {
-	 User existuser = services.get(id);
-	 existuser.setName(user.getName());
-	 existuser.setType(user.getType());
-	 existuser.setPassword(user.getPassword());
-	 services.save(existuser);
-	 return new ResponseEntity<>(HttpStatus.OK);
-	 } 
-	 catch (NoSuchElementException e) 
-	 {
-	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	 } 
-	 }
-	 
-	 @DeleteMapping("/users/{id}")
-	 public void delete(@PathVariable Integer id) //extracting ID from the URL
-	 {
-	 services.delete(id);
-	 }
-	 
-	 
-	 
-	 
-	
-	
-	
+	@Autowired
+	UserRepository userRepository;
+
+	@GetMapping("/users")
+	public List<User> list() {
+		return services.listAll();
+	}
+
+	@GetMapping("/users/{id}")
+	public ResponseEntity<User> get(@PathVariable Integer id) {
+		try {
+			User user = services.get(id);
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		}
+
+		catch (UserNotFound ex) {
+
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@PostMapping("/users")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public void add(@RequestBody User user) {
+		services.save(user);
+	}
+
+	@PutMapping("/users/{id}")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public ResponseEntity<?> update(@RequestBody User user, @PathVariable Integer id) {
+		try {
+			User existuser = services.get(id);
+			existuser.setName(user.getName());
+			existuser.setType(user.getType());
+			existuser.setPassword(user.getPassword());
+			services.save(existuser);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody User user) {
+		List<User> users = services.listAll();
+		for (User existingUser : users) {
+			if (existingUser.getName().equals(user.getName())
+					&& existingUser.getPassword().equals(user.getPassword())) {
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout() {
+		// Logout logic (if any session handling is done, it should be invalidated here)
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@DeleteMapping("/users/{id}")
+	public void delete(@PathVariable Integer id) // extracting ID from the URL
+	{
+		services.delete(id);
+	}
+
 }
